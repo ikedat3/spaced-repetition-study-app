@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Spaced Repetition Study App</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+</head>
+<body>
+  <main class="container">
+    <h1>間隔反復 学習アプリ</h1>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <ul class="messages">
+          {% for category, message in messages %}
+            <li class="{{ category }}">{{ message }}</li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    <section class="panel">
+      <h2>CSVインポート</h2>
+      <p>CSV形式: <code>問題,回答,解説</code></p>
+      <form action="{{ url_for('import_csv') }}" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" accept=".csv" required />
+        <button type="submit">インポート</button>
+      </form>
+    </section>
+
+    <section class="panel stats-grid">
+      <div><strong>総カード数</strong><span>{{ stats.total_cards }}</span></div>
+      <div><strong>マスター済み</strong><span>{{ stats.mastered_cards }}</span></div>
+      <div><strong>学習中</strong><span>{{ stats.in_progress_cards }}</span></div>
+      <div><strong>復習待ち</strong><span>{{ stats.due_cards }}</span></div>
+      <div><strong>総レビュー回数</strong><span>{{ stats.total_reviews }}</span></div>
+    </section>
+
+    <nav class="links">
+      <a class="button-link" href="{{ url_for('study') }}">学習を開始</a>
+      <a class="button-link secondary" href="{{ url_for('history') }}">履歴を見る</a>
+    </nav>
+  </main>
+</body>
+</html>
